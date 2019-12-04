@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context="shopping.akshar.com.shopping.activity.LoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ladymodel" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Log In"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/login_email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/textborder"
+        android:drawableStart="@drawable/email"
+        android:drawableLeft="@drawable/email"
+        android:gravity="center"
+        android:hint="Email Address"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/login_password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/textborder"
+        android:drawableStart="@drawable/pass"
+        android:drawableLeft="@drawable/pass"
+        android:gravity="center"
+        android:hint="Password"
+        android:inputType="textPassword" />
+
+
+    <TextView
+        android:id="@+id/newuser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="New User ? Sign Up" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:paddingLeft="2dp">
+
+            <Button
+                android:id="@+id/gest"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:onClick="continue_to_main"
+                android:background="@color/colorAccent"
+                android:text="continue"
+                android:textColor="@color/White" />
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+
+                android:background="@color/colorPrimaryDark"
+                android:text="Login"
+                android:textColor="@color/White" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
