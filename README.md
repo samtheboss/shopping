@@ -191,3 +191,30 @@ Handles read commit a files:
         }
         return files; // Return the map of files
     }
+
+```
+###Create branch logic
+Handles create branch:
+```java
+ public static void createBranch(String branchName) {
+        // Get the current HEAD commit hash
+        File head = new File(".dotgit/HEAD");
+        File masters = new File(".dotgit/refs/heads/master");
+        if (!masters.exists()) {
+            System.out.println("not a valid object name: 'master'");
+        }
+        try {
+            String currentCommit = Utils.readFile(head).split(": ")[1].trim();
+            // Create a new branch file
+            File branchFile = new File(".dotgit/refs/heads/" + branchName);
+            if (branchFile.exists()) {
+                System.out.println("Branch " + branchName + " already exists!");
+                return;
+            }
+            branchFile.createNewFile();
+            Utils.writeToFile(branchFile, currentCommit);
+            System.out.println("Branch " + branchName + " created at commit " + currentCommit);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
