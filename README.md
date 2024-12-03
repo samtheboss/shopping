@@ -107,7 +107,11 @@ Handles creating a commit:
             if (branchName.isEmpty()) { // Check if the branch name is empty
                 System.out.println("No active branch found. Please create or switch to a branch.");
                 return; // Exit if no active branch
-            }}
+            }}}
+```
+### merge Logic
+Handles creating a merge:
+```java
     public static void merge(String targetBranch, String author) {
         try {
             // Get the latest commit hashes for the branches
@@ -171,4 +175,19 @@ Handles creating a commit:
             e.printStackTrace(); // Print stack trace for debugging
             System.out.println("An error occurred during the merge.");
         }
+    }
+```
+### read commit logic
+Handles read commit a files:
+```java
+   private static Map<String, String> readCommitFiles(String commitHash) throws IOException {
+        Map<String, String> files = new HashMap<>(); // Map to store file names and their contents
+        File commitDir = new File(".dotgit/commits/" + commitHash + "_files"); // Directory for commit files
+        if (commitDir.exists()) {
+            // Iterate through files in the commit directory
+            for (File file : Objects.requireNonNull(commitDir.listFiles())) {
+                files.put(file.getName(), new String(Files.readAllBytes(file.toPath()))); // Read file content
+            }
+        }
+        return files; // Return the map of files
     }
