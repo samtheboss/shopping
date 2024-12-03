@@ -108,3 +108,67 @@ Handles creating a commit:
                 System.out.println("No active branch found. Please create or switch to a branch.");
                 return; // Exit if no active branch
             }}
+    public static void merge(String targetBranch, String author) {
+        try {
+            // Get the latest commit hashes for the branches
+            String currentBranch = GitServices.getCurrentBranch();
+            String targetBranchCommit = Utils.getBranchCommit(targetBranch);
+            String currentBranchCommit = Utils.getBranchCommit(currentBranch);
+
+            // Check if either branch has no commits
+            if (targetBranchCommit == null || currentBranchCommit == null) {
+                System.out.println("Cannot merge. One or both branches have no commits.");
+                return; // Exit the method if no commits are found
+            }
+
+            // Identify the base commit (common ancestor)
+            String baseCommit = findCommonAncestor(targetBranchCommit, currentBranchCommit);
+            // Check if a common ancestor was found
+            if (baseCommit == null) {
+                System.out.println("No common ancestor found. Cannot perform a merge.");
+                return; // Exit the method if no common ancestor is found
+            }
+
+            // Collect changes from both branches
+            Map<String, String> baseChanges = readCommitFiles(baseCommit);
+            Map<String, String> currentChanges = readCommitFiles(currentBranchCommit);
+            Map<String, String> targetChanges = readCommitFiles(targetBranchCommit);
+
+            // Perform a three-way merge
+            Map<String, String> mergedChanges = new HashMap<>();
+            // Iterate through files in the base changes
+            for (String file : baseChanges.keySet()) {
+                String baseContent = baseChanges.get(file); // Get base content
+                String currentContent = currentChanges.getOrDefault(file, baseContent); // Get current content or base if not present
+                String targetContent = targetChanges.getOrDefault(file, baseContent); // Get target content or base if not present
+
+                // Check for conflicts and determine which content to keep
+                if (currentContent.equals(targetContent)) {
+                    // No conflict, keep the current content
+                    mergedChanges.put(file, currentContent);
+                } else if (currentContent.equals(baseContent)) {
+                    // No conflict, accept target changes
+                    mergedChanges.put(file, targetContent);
+                } else if (targetContent.equals(baseContent)) {
+                    // No conflict, accept current changes
+                    mergedChanges.put(file, currentContent);
+                } else {
+                    // Conflict detected
+                    System.out.println("Conflict detected in file: " + file);
+                    // Mark the conflict in the merged changes
+                    mergedChanges.put(file, "<<<<<<< CURRENT\n" + currentContent + "\n=======\n" + targetContent + "\n>>>>>>>");
+                }
+            }
+
+            // Apply merged changes to the files
+            applyMergedChanges(mergedChanges);
+
+            // Create a merge commit with the provided author and message
+            createMergeCommit(author, "Merged branch '" + targetBranch + "' into '" + currentBranch + "'", currentBranchCommit, targetBranchCommit);
+
+            System.out.println("Merge completed successfully.");
+        } catch (Exception e) {
+            e.printStackTrace(); // Print stack trace for debugging
+            System.out.println("An error occurred during the merge.");
+        }
+    }
